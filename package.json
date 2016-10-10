@@ -1,0 +1,41 @@
+{
+  "author": {
+    "name": "Huang Rui"
+  },
+  "bugs": {
+    "url": "https://github.com/vowstar/gitbook-plugin-sequence/issues"
+  },
+  "dependencies": {
+    "phantom": "^2.0.0",
+    "q": "^1.4.1"
+  },
+  "description": "js-sequence-diagrams plugin for GitBook",
+  "devDependencies": {},
+  "directories": {},
+  "engines": {
+    "gitbook": "*"
+  },
+  "homepage": "https://github.com/vowstar/gitbook-plugin-sequence",
+  "keywords": [
+    "diagrams",
+    "sequence",
+    "plugin",
+    "gitbook"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "email": "vowstar@gmail.com",
+      "name": "Huang Rui"
+    }
+  ],
+  "name": "gitbook-plugin-sequence",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vowstar/gitbook-plugin-sequence.git"
+  },
+  "scripts": {},
+  "version": "0.0.8"
+}
