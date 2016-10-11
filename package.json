@@ -3,19 +3,20 @@
     "name": "Huang Rui"
   },
   "bugs": {
-    "url": "https://github.com/vowstar/gitbook-plugin-sequence/issues"
+    "url": "https://github.com/vowstar/gitbook-plugin-echarts/issues"
   },
   "dependencies": {
     "phantom": "^2.0.0",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "echarts": "^3.2.3"
   },
   "description": "js-sequence-diagrams plugin for GitBook",
   "devDependencies": {},
   "directories": {},
   "engines": {
-    "gitbook": "*"
+    "gitbook": ">=3.0.0"
   },
-  "homepage": "https://github.com/vowstar/gitbook-plugin-sequence",
+  "homepage": "https://github.com/vowstar/gitbook-plugin-echarts",
   "keywords": [
     "diagrams",
     "sequence",
@@ -30,11 +31,11 @@
       "name": "Huang Rui"
     }
   ],
-  "name": "gitbook-plugin-sequence",
+  "name": "gitbook-plugin-echarts",
   "optionalDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vowstar/gitbook-plugin-sequence.git"
+    "url": "git+https://github.com/vowstar/gitbook-plugin-echarts.git"
   },
   "scripts": {},
   "version": "0.0.8"
