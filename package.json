@@ -8,6 +8,9 @@
   "dependencies": {
     "phantom": "^2.0.0",
     "q": "^1.4.1",
+    "fs-extra":"^0.30.0",
+    "crypto": "^0.0.3",
+    "mkdirp": "^0.5.0",
     "echarts": "^3.2.3"
   },
   "description": "js-sequence-diagrams plugin for GitBook",

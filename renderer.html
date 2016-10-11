@@ -4,11 +4,29 @@
     <meta charset="utf-8">
     <script src="assets/echarts.min.js"></script>
     <script>
-      function render(code, options, width) {
+      function render(code, config, width, height) {
         var canvas = document.getElementsByClassName("chart")[0];
-        var instance = echarts.init(canvas);
+
         var json = JSON.parse(code);
         json["animation"] = false;
+        
+        if(!("width" in json)) {
+          width = json["width"];
+        }
+
+        if(!("height" in json)) {
+          height = json["height"];
+        }
+
+        if (width) {
+          canvas.style.width = width;
+        }
+        if (height) {
+          canvas.style.height = height;
+        }
+
+        var instance = echarts.init(canvas);
+
         instance.setOption(JSON.parse(code));
         //return '<img src="' + instance.getDataURL() + '" />';
         return instance.getDataURL().replace(/^data:image\/png;base64,/, '');
