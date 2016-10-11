@@ -8,14 +8,14 @@
         var canvas = document.getElementsByClassName("chart")[0];
 
         var json = JSON.parse(code);
-        json["animation"] = false;
+        json.animation = false;
         
-        if(!("width" in json)) {
-          width = json["width"];
+        if("width" in json) {
+          width = json.width;
         }
 
-        if(!("height" in json)) {
-          height = json["height"];
+        if("height" in json) {
+          height = json.height;
         }
 
         if (width) {
@@ -27,7 +27,7 @@
 
         var instance = echarts.init(canvas);
 
-        instance.setOption(JSON.parse(code));
+        instance.setOption(json);
         //return '<img src="' + instance.getDataURL() + '" />';
         return instance.getDataURL().replace(/^data:image\/png;base64,/, '');
       }
@@ -35,6 +35,6 @@
   </head>
 
   <body>
-    <div class="chart" style="width: 600px;height:400px;"></div>
+    <div class="chart" style="width:600px;height:400px;"></div>
   </body>
 </html>

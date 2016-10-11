@@ -92,9 +92,39 @@ Also you can put in your book block as
 
 ### Extend the width
 
+Code mode:
+
+<pre lang="no-highlight"><code>```chart
+{
+    "width": "900px",
+    "height": "500px",
+    "title": {
+        "text": "Fruits number"
+    },
+    "tooltip": {},
+    "legend": {
+        "data":["Number"]
+    },
+    "xAxis": {
+        "data": ["Apple","Banana","Peach","Pear","Grape","Kiwi"]
+    },
+    "yAxis": {},
+    "series": [{
+        "name": "Number",
+        "type": "bar",
+        "data": [5, 20, 36, 10, 10, 20]
+    }]
+}
 ```
-{% chart width=900 height=500 %}
+</code></pre>
+
+Template mode:
+
 ```
+{% chart width="800px" height="800px" %}
+```
+
+> If use both configure method, the code configure will overwrite the template configure.
 
 ### Learn EChart and more information
 
