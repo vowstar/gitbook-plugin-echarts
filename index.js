@@ -44,12 +44,10 @@ function processBlock(blk) {
   return processLink(code, config, width, height).then(function(data) {
     assetPath = './assets/images/chart/';
     filePath = assetPath + crypto.createHash('sha1').update(code + config + width + height).digest('hex') + '.png';
-    fs.mkdirs(assetPath, function(err) {
-      if (err)
-        console.error(err);
-    })
 
-    url = processImage(filePath, data);
+    fs.mkdirpSync(assetPath);
+
+    var url = processImage(filePath, data);
     // Get file type can use console.log(book.ctx.ctx.file.type);
     // But here must use html
     return "<img src=" + url + ">";
