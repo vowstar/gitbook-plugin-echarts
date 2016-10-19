@@ -40,5 +40,5 @@
     "url": "git+https://github.com/vowstar/gitbook-plugin-echarts.git"
   },
   "scripts": {},
-  "version": "0.0.8"
+  "version": "0.0.9"
 }
