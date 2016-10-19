@@ -63,6 +63,12 @@ module.exports = {
     }
   },
   hooks: {
+    // For all the hooks, this represent the current generator
+    // [init", "finish", "finish:before", "page", "page:before"] are working.
+    // page:* are marked as deprecated because it's better if plugins start using blocks instead. 
+    // But page and page:before will probably stay at the end (useful in some cases).
+
+    // This is called before the book is generated
     // Init plugin and read config
     "init": function() {
       if (!Object.keys(this.book.config.get('pluginsConfig.chart', {})).length) {
@@ -70,8 +76,8 @@ module.exports = {
       }
     },
 
-    // This is called after the book generation
-    "finish": function() {
+    // This is called before the end of the book generation
+    "finish:before": function() {
       // Copy images to output folder every time
       var book = this;
       var output = book.output;
