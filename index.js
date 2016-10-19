@@ -82,7 +82,7 @@ module.exports = {
       var book = this;
       var output = book.output;
       var rootPath = output.root();
-      if ('website' === output.name) {
+      if (rootPath) {
         fs.mkdirs(rootPath + '/assets/images/chart/');
         fs.copy('./assets/images/chart/', rootPath + '/assets/images/chart/', {
           clobber: true
