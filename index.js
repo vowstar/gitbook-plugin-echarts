@@ -52,7 +52,7 @@ function processBlock(blk) {
         var url = processImage(filePath, data);
         // Get file type can use console.log(book.ctx.ctx.file.type);
         // But here must use html
-        return "<img src=" + url + ">";
+        return "<img src=/" + url + ">";
     });
 }
 
@@ -84,12 +84,13 @@ module.exports = {
             var rootPath = output.root();
             if (fs.existsSync(ASSET_PATH)) {
                 fs.mkdirs(path.join(rootPath, ASSET_PATH));
-                fs.copy(ASSET_PATH, path.join(rootPath, ASSET_PATH), {
-                    clobber: true
-                }, function(err) {
-                    if (err)
-                        console.error(err)
-                })
+                // fs.copy(ASSET_PATH, path.join(rootPath, ASSET_PATH), {
+                //     clobber: true
+                // }, function(err) {
+                //     if (err)
+                //         console.error(err)
+                // })
+                fs.copySync(ASSET_PATH, path.join(rootPath, ASSET_PATH));
             }
         },
 
