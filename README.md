@@ -19,7 +19,7 @@ book.json add the plugin
 ## Features
 
 * Support HTML, PDF, EPUB output(make sure your gitbook support SVG)
-* Support ```flow code block quote
+* Support ```chart code block quote
 * Multi code style support
 
 ### Beautiful Chat
