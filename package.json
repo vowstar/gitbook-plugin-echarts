@@ -10,7 +10,7 @@
     "q": "^1.4.1",
     "fs-extra":"^0.30.0",
     "crypto": "^0.0.3",
-    "echarts": "^3.2.3"
+    "echarts": "^4.0.4"
   },
   "description": "Echarts chart plugin for GitBook",
   "devDependencies": {},
