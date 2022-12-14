@@ -132,7 +132,7 @@ Template mode:
 
 > If use both configure method, the code configure will overwrite the template configure.
 
-## Learn EChart and more information
+## Learn echarts
 
 [echarts](https://echarts.apache.org)
 
