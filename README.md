@@ -29,7 +29,8 @@ Add this plugin into ``book.json``.
 
 ### Beautiful Chat
 
-![Beautiful Chat](images/chart.png)
+![Bar chat](images/bar.svg)
+![Pie chat](images/pie.svg)
 
 ## Configuration
 

@@ -4,6 +4,67 @@ var path = require('path');
 var puppeteer = require('puppeteer');
 var Q = require('q');
 
+function transform(input, toSingleQuotes) {
+	let result = '';
+	let isBetweenQuotes = false;
+	let quoteCharacter;
+	let changeTo = '';
+	let toChange = '';
+
+	if (toSingleQuotes) {
+		changeTo = '\'';
+		toChange = '"';
+	}	else {
+		changeTo = '"';
+		toChange = '\'';
+	}
+
+	for (let index = 0; index < input.length; index++) {
+		const current = input[index];
+		const next = input[index + 1];
+
+		// Found double-quote or single-quote
+		if (current === '"' || current === '\'') {
+			// If not processing in between quotes
+			if (!isBetweenQuotes) {
+				quoteCharacter = current;
+				isBetweenQuotes = true;
+				result += changeTo;
+			} else if (quoteCharacter === current) {
+				// If processing between quotes, close quotes
+				result += changeTo;
+				isBetweenQuotes = false;
+			} else {
+				// Still inside quotes
+				result += '\\' + changeTo;
+			}
+		} else if (current === '\\' && (next === '\'' || next === '"')) {
+			// If escape character is found and double or single quote after
+			// Escape + quote to change to
+			if (next === changeTo) {
+				// If in between quotes and quote is equal to changeTo only escape once
+				result += isBetweenQuotes && quoteCharacter === changeTo ? '\\' + changeTo : '\\\\' + changeTo;
+				index++;
+			} else if (next === toChange) {
+				// Escape + quote to be changed
+				// If between quotes can mantain tochange
+				result += isBetweenQuotes ? toChange : changeTo;
+				index++;
+			} else {
+				result += current;
+			}
+		} else if (current === '\\' && next === '\\') {
+			// Don't touch backslashes
+			result += '\\\\';
+			index++;
+		} else {
+			result += current;
+		}
+	}
+
+	return result;
+}
+
 function processBlock(blk) {
     var deferred = Q.defer();
 
@@ -17,9 +78,14 @@ function processBlock(blk) {
     try {
         JSON.parse(code);
     } catch (e) {
-        console.error("Invalid JSON: " + code);
-        deferred.resolve('<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg"><text x="10" y="100" font-size="60" text-anchor="middle">Invalid JSON format! Please modify your JSON input.</text></svg>');
-        return deferred.promise;
+        code = transform(code, false);
+        try {
+            JSON.parse(code);
+        } catch (e) {
+            console.error("Invalid JSON: " + code);
+            deferred.resolve('<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg"><text x="10" y="100" font-size="60" text-anchor="left">Invalid JSON format! Please modify your JSON input.</text></svg>');
+            return deferred.promise;
+        }
     }
 
     (async (code, config, width, height) => {
