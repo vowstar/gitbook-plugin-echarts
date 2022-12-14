@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <script src="assets/echarts.min.js"></script>
     <script>
-      function render(code, config, width, height) {
+      function sleep(time){
+        return new Promise((resolve) => setTimeout(resolve, time));
+      }
+      async function render(code, config, width, height) {
         var canvas = document.getElementsByClassName("chart")[0];
 
         var json = JSON.parse(code);
@@ -28,6 +31,10 @@
         var instance = echarts.init(canvas, null, { renderer: 'svg' });
 
         instance.setOption(json);
+
+        while (canvas.childNodes[0].childNodes.length == 0) {
+          await sleep(100);
+        }
 
         return new XMLSerializer().serializeToString(canvas);
       }

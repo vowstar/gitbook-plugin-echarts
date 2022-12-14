@@ -43,7 +43,7 @@ function processBlock(blk) {
                         config = JSON.parse(decodeURIComponent("${xConfig}"));
                         width = decodeURIComponent("${xWidth}");
                         height = decodeURIComponent("${xHeight}");
-                        return render(code, config, width);
+                        return await render(code, config, width);
                  })()`
         );
 
