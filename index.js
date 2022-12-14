@@ -31,8 +31,6 @@ function processBlock(blk) {
         const htmlFile = path.join(__dirname, 'renderer.html');
         await page.goto("file://" + htmlFile, { waitUntil: 'networkidle2' });
 
-        console.error(code);
-
         xCode = encodeURIComponent(code);
         xConfig = encodeURIComponent(JSON.stringify(config));
         xWidth = encodeURIComponent(width);
