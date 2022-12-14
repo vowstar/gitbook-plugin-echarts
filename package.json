@@ -52,5 +52,5 @@
     "coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "echartsVersion": "5.4.1",
-  "version": "0.0.17"
+  "version": "1.0.0"
 }
