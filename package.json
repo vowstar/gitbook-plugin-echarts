@@ -6,24 +6,28 @@
     "url": "https://github.com/vowstar/gitbook-plugin-echarts/issues"
   },
   "dependencies": {
-    "phantom": "^2.0.0",
-    "q": "^1.4.1",
-    "fs-extra":"^0.30.0",
-    "crypto": "^0.0.3",
-    "echarts": "^4.0.4"
+    "puppeteer": "^19.x",
+    "q": "^1.x"
   },
   "description": "Echarts chart plugin for GitBook",
-  "devDependencies": {},
+  "devDependencies": {
+    "coveralls": "^3.x",
+    "honkit-tester": "^1.x",
+    "is-svg": "^4.x",
+    "jshint": "^2.x",
+    "mocha": "^10.x",
+    "nyc": "^15.x"
+  },
   "directories": {},
   "engines": {
-    "gitbook": ">=3.0.0"
+    "gitbook": "*"
   },
   "homepage": "https://github.com/vowstar/gitbook-plugin-echarts",
   "keywords": [
-    "diagrams",
-    "sequence",
-    "plugin",
-    "gitbook"
+    "echarts",
+    "gitbook",
+    "honkit",
+    "markdown"
   ],
   "license": "MIT",
   "main": "index.js",
@@ -39,6 +43,14 @@
     "type": "git",
     "url": "git+https://github.com/vowstar/gitbook-plugin-echarts.git"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "jshint *.js test/**.js scripts/**.js",
+    "prepublish": "node scripts/get-assets.js",
+    "postinstall": "node scripts/get-assets.js",
+    "pretest": "npm run lint",
+    "test": "nyc --reporter=lcov mocha --reporter spec --timeout 20000",
+    "coverage": "cat ./coverage/lcov.info | coveralls"
+  },
+  "echartsVersion": "5.4.1",
   "version": "0.0.17"
 }

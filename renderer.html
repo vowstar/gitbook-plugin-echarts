@@ -9,7 +9,7 @@
 
         var json = JSON.parse(code);
         json.animation = false;
-        
+
         if("width" in json) {
           width = json.width;
         }
@@ -25,11 +25,11 @@
           canvas.style.height = height;
         }
 
-        var instance = echarts.init(canvas);
+        var instance = echarts.init(canvas, null, { renderer: 'svg' });
 
         instance.setOption(json);
-        //return '<img src="' + instance.getDataURL() + '" />';
-        return instance.getDataURL().replace(/^data:image\/png;base64,/, '');
+
+        return new XMLSerializer().serializeToString(canvas);
       }
     </script>
   </head>

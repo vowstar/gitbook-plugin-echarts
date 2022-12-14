@@ -1,59 +1,64 @@
+/*jshint esversion: 8 */
+
 var path = require('path');
-var phantom = require('phantom');
+var puppeteer = require('puppeteer');
 var Q = require('q');
 
-var fs = require('fs-extra')
-var crypto = require('crypto');
-
-var ASSET_PATH = 'assets/images/chart/';
-
-function processImage(filePath, data) {
-    require("fs").writeFile(filePath, data, 'base64', function(err) {
-        if (err)
-            console.log(err);
-    });
-    return filePath;
-}
-
-function processLink(code, config, width, height) {
-    var deferred = Q.defer();
-
-    phantom.create().then(function(ph) {
-        ph.createPage().then(function(page) {
-            var pagePath = path.join(__dirname, 'renderer.html');
-            page.open(pagePath).then(function(status) {
-                var result = page.evaluate(function(code, config, width, height) {
-                    return render(code, config, width, height);
-                }, code, config, width, height);
-                ph.exit();
-                deferred.resolve(result);
-            });
-        });
-    });
-
-    return deferred.promise;
-}
-
 function processBlock(blk) {
+    var deferred = Q.defer();
 
     var book = this;
     var code = blk.body;
     var config = book.config.get('pluginsConfig.chart', {});
 
-    var width = blk.kwargs['width'];
-    var height = blk.kwargs['height'];
+    var width = blk.kwargs.width;
+    var height = blk.kwargs.height;
 
-    return processLink(code, config, width, height).then(function(data) {
-        assetPath = ASSET_PATH;
-        filePath = assetPath + crypto.createHash('sha1').update(code + config + width + height).digest('hex') + '.png';
+    try {
+        JSON.parse(code);
+    } catch (e) {
+        console.error("Invalid JSON: " + code);
+        deferred.resolve('<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg"><text x="10" y="100" font-size="60" text-anchor="middle">Invalid JSON format! Please modify your JSON input</text></svg>');
+        return deferred.promise;
+    }
 
-        fs.mkdirpSync(assetPath);
+    (async (code, config, width, height) => {
+        const browser = await puppeteer.launch({
+            args: ['--disable-dev-shm-usage', '--no-sandbox', '--allow-file-access-from-files', '--enable-local-file-accesses']
+        });
+        const page = await browser.newPage();
 
-        var url = processImage(filePath, data);
-        // Get file type can use console.log(book.ctx.ctx.file.type);
-        // But here must use html
-        return "<img src=/" + url + ">";
-    });
+        const htmlFile = path.join(__dirname, 'renderer.html');
+        await page.goto("file://" + htmlFile, { waitUntil: 'networkidle2' });
+
+        console.error(code);
+
+        xCode = encodeURIComponent(code);
+        xConfig = encodeURIComponent(JSON.stringify(config));
+        xWidth = encodeURIComponent(width);
+        xHeight = encodeURIComponent(height);
+
+        /* istanbul ignore next */
+        var result = await page.evaluate(
+            `(async() => {
+                        code = decodeURIComponent("${xCode}");
+                        config = JSON.parse(decodeURIComponent("${xConfig}"));
+                        width = decodeURIComponent("${xWidth}");
+                        height = decodeURIComponent("${xHeight}");
+                        return render(code, config, width);
+                 })()`
+        );
+
+        await browser.close();
+
+        return result;
+    })(code, config, width, height).then(
+        function (result) {
+            deferred.resolve(result);
+        }
+    );
+
+    return deferred.promise;
 }
 
 module.exports = {
@@ -75,35 +80,75 @@ module.exports = {
                 this.book.config.set('pluginsConfig.chart', {});
             }
         },
-
-        // Before the end of book generation
-        "finish:before": function() {
-            // Copy images to output folder every time
-            var book = this;
-            var output = book.output;
-            var rootPath = output.root();
-            if (fs.existsSync(ASSET_PATH)) {
-                fs.mkdirs(path.join(rootPath, ASSET_PATH));
-                // fs.copy(ASSET_PATH, path.join(rootPath, ASSET_PATH), {
-                //     clobber: true
-                // }, function(err) {
-                //     if (err)
-                //         console.error(err)
-                // })
-                fs.copySync(ASSET_PATH, path.join(rootPath, ASSET_PATH));
-            }
-        },
-
         // Before parsing markdown
-        "page:before": function(page) {
+        "page:before": function (page) {
             // Get all code texts
-            flows = page.content.match(/^```chart((.*\n)+?)?```$/igm);
+            flows = page.content.match(/```(\x20|\t)*(chart|echarts)((.*[\r\n]+)+?)?```/igm);
             // Begin replace
             if (flows instanceof Array) {
                 for (var i = 0, len = flows.length; i < len; i++) {
                     page.content = page.content.replace(
                         flows[i],
-                        flows[i].replace(/^```chart/, '{% chart %}').replace(/```$/, '{% endchart %}'));
+                        flows[i]
+                            .replace(/```(\x20|\t)*(chart|echarts)[ \t]+{(.*)}/i,
+                                function (matchedStr) {
+                                    if (!matchedStr)
+                                        return "";
+                                    var newStr = "";
+                                    var modeQuote = false;
+                                    var modeArray = false;
+                                    var modeChar = false;
+                                    var modeEqual = false;
+                                    // Trim left and right space
+                                    var str = matchedStr.replace(/^\s+|\s+$/g, "");
+                                    // Remove ```chart header
+                                    str = str.replace(/```(\x20|\t)*(chart|echarts)/i, "");
+
+                                    // Build new str
+                                    for (var i = 0; i < str.length; i++) {
+                                        if (str.charAt(i) == "\"") {
+                                            modeQuote = !modeQuote;
+                                            modeChar = true;
+                                            newStr += str.charAt(i);
+                                            continue;
+                                        }
+                                        if (str.charAt(i) == "[") {
+                                            modeArray = true;
+                                            newStr += str.charAt(i);
+                                            continue;
+                                        }
+                                        if (str.charAt(i) == "]") {
+                                            modeArray = false;
+                                            newStr += str.charAt(i);
+                                            continue;
+                                        }
+                                        if (modeQuote || modeArray) {
+                                            // In quote, keep all string
+                                            newStr += str.charAt(i);
+                                        } else {
+                                            // Out of quote, process it
+                                            if (str.charAt(i).match(/[A-Za-z0-9_]/)) {
+                                                modeChar = true;
+                                                newStr += str.charAt(i);
+                                            } else if (str.charAt(i).match(/[=]/)) {
+                                                modeEqual = true;
+                                                modeChar = false;
+                                                newStr += str.charAt(i);
+                                            } else if (modeChar && modeEqual) {
+                                                modeChar = false;
+                                                modeEqual = false;
+                                                newStr += ",";
+                                            }
+                                        }
+                                    }
+
+                                    newStr = newStr.replace(/,$/, "");
+
+                                    return "{% chart " + newStr + " %}";
+                                })
+                            .replace(/```(\x20|\t)*(chart|echarts)/i, '{% chart %}')
+                            .replace(/```/, '{% endchart %}')
+                    );
                 }
             }
             return page;
