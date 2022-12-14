@@ -30,7 +30,7 @@ describe('echarts', function() {
     });
     it('should correctly replace by ```chart { width = 600, foo = "bar" }``` tag', function() {
         return tester.builder()
-            .withContent('\n```chart { width = 600, foo = "bar" }\n"{width":"900px","height":"500px","title":{"text":"Fruitsnumber"},"tooltip":{},"legend":{"data":["Number"]},"xAxis":{"data":["Apple","Banana","Peach","Pear","Grape","Kiwi"]},"yAxis":{},"series":[{"name":"Number","type":"bar","data":[5,20,36,10,10,20]}]}\n```')
+            .withContent('\n```chart { width = 600, foo = "bar" }\n{"width":"900px","height":"500px","title":{"text":"Fruitsnumber"},"tooltip":{},"legend":{"data":["Number"]},"xAxis":{"data":["Apple","Banana","Peach","Pear","Grape","Kiwi"]},"yAxis":{},"series":[{"name":"Number","type":"bar","data":[5,20,36,10,10,20]}]}\n```')
             .withLocalPlugin(path.join(__dirname, '..'))
             .withBookJson({
                 gitbook: pkg.engines.gitbook,
@@ -51,7 +51,7 @@ describe('echarts', function() {
     });
     it('should correctly replace by {% chart %} and endchart {% endchart %} tag', function() {
         return tester.builder()
-            .withContent('\n{% chart %}\n"{width":"900px","height":"500px","title":{"text":"Fruitsnumber"},"tooltip":{},"legend":{"data":["Number"]},"xAxis":{"data":["Apple","Banana","Peach","Pear","Grape","Kiwi"]},"yAxis":{},"series":[{"name":"Number","type":"bar","data":[5,20,36,10,10,20]}]}\n{% endchart %}')
+            .withContent('\n{% chart %}\n{"width":"900px","height":"500px","title":{"text":"Fruitsnumber"},"tooltip":{},"legend":{"data":["Number"]},"xAxis":{"data":["Apple","Banana","Peach","Pear","Grape","Kiwi"]},"yAxis":{},"series":[{"name":"Number","type":"bar","data":[5,20,36,10,10,20]}]}\n{% endchart %}')
             .withLocalPlugin(path.join(__dirname, '..'))
             .withBookJson({
                 gitbook: pkg.engines.gitbook,
