@@ -28,9 +28,9 @@ describe('echarts', function() {
                 assert.equal(svg.includes('Pear'), true);
             });
     });
-    it('should correctly replace by ```chart { foo = "bar" }``` tag', function() {
+    it('should correctly replace by ```chart { width = 600, height = 400, foo = "bar" }``` tag', function() {
         return tester.builder()
-            .withContent('\n```chart { foo = "bar" }\n{"width":"900px","height":"500px","title":{"text":"Fruitsnumber"},"tooltip":{},"legend":{"data":["Number"]},"xAxis":{"data":["Apple","Banana","Peach","Pear","Grape","Kiwi"]},"yAxis":{},"series":[{"name":"Number","type":"bar","data":[5,20,36,10,10,20]}]}\n```')
+            .withContent('\n```chart { width = 600, height = 400, foo = "bar" }\n{"title":{"text":"Fruitsnumber"},"tooltip":{},"legend":{"data":["Number"]},"xAxis":{"data":["Apple","Banana","Peach","Pear","Grape","Kiwi"]},"yAxis":{},"series":[{"name":"Number","type":"bar","data":[5,20,36,10,10,20]}]}\n```')
             .withLocalPlugin(path.join(__dirname, '..'))
             .withBookJson({
                 gitbook: pkg.engines.gitbook,
@@ -46,6 +46,7 @@ describe('echarts', function() {
                 assert.equal(svg.includes('Banana'), true);
                 assert.equal(svg.includes('Peach'), true);
                 assert.equal(svg.includes('Pear'), true);
+                assert.equal(svg.includes('width="600"'), true);
             });
     });
     it('should correctly replace by {% chart %} and endchart {% endchart %} tag', function() {

@@ -82,8 +82,8 @@ function processBlock(blk) {
         try {
             JSON.parse(code);
         } catch (e) {
-            console.error("Invalid JSON: " + code);
             deferred.resolve('<svg version="1.1" width="600" height="200" xmlns="http://www.w3.org/2000/svg"><text x="10" y="100" font-size="60" text-anchor="left">Invalid JSON format! Please modify your JSON input.</text></svg>');
+            console.error("Invalid JSON: " + code);
             return deferred.promise;
         }
     }
@@ -109,7 +109,7 @@ function processBlock(blk) {
                         config = JSON.parse(decodeURIComponent("${xConfig}"));
                         width = decodeURIComponent("${xWidth}");
                         height = decodeURIComponent("${xHeight}");
-                        return await render(code, config, width);
+                        return await render(code, config, width, height);
                  })()`
         );
 

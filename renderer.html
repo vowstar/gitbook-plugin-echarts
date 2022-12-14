@@ -23,9 +23,11 @@
 
         if (width) {
           canvas.style.width = width;
+          json.width = width;
         }
         if (height) {
           canvas.style.height = height;
+          json.height = height;
         }
 
         var instance = echarts.init(canvas, null, { renderer: 'svg' });
