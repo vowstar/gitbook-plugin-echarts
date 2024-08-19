@@ -6,7 +6,7 @@
     "url": "https://github.com/vowstar/gitbook-plugin-echarts/issues"
   },
   "dependencies": {
-    "puppeteer": "^22.x",
+    "puppeteer": "^23.x",
     "q": "^1.x"
   },
   "description": "Echarts chart plugin for GitBook",
