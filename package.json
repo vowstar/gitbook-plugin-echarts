@@ -6,14 +6,13 @@
     "url": "https://github.com/vowstar/gitbook-plugin-echarts/issues"
   },
   "dependencies": {
-    "puppeteer": "^23.x",
-    "q": "^1.x"
+    "puppeteer": "^23.x"
   },
   "description": "Echarts chart plugin for GitBook",
   "devDependencies": {
-    "coveralls": "^3.x",
-    "honkit-tester": "^1.x",
-    "is-svg": "^4.x",
+    "codecov": "^3.x",
+    "honkit-tester": "^2.x",
+    "is-svg": "<5",
     "jshint": "^2.x",
     "mocha": "^10.x",
     "nyc": "^17.x"
@@ -46,11 +45,10 @@
   "scripts": {
     "lint": "jshint *.js test/**.js scripts/**.js",
     "prepublish": "node scripts/get-assets.js",
-    "postinstall": "node scripts/get-assets.js",
     "pretest": "npm run lint",
     "test": "nyc --reporter=lcov mocha --reporter spec --timeout 20000",
-    "coverage": "cat ./coverage/lcov.info | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | codecov"
   },
-  "echartsVersion": "5.4.1",
-  "version": "1.0.6"
+  "echartsVersion": "5.5.0",
+  "version": "2.0.0"
 }
